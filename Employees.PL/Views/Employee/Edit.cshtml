@@ -1,0 +1,181 @@
+﻿@model Employees.DAL.Entities.Employee
+@Model.Id
+@Model.Name
+@Model.Age
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<div class="page-shell">
+
+    <!-- ========================= -->
+    <!-- Page Header -->
+    <!-- ========================= -->
+
+    <div class="page-header">
+        <div>
+            <span class="eyebrow">
+                <i class="bi bi-pencil-square"></i>
+                Employee Management
+            </span>
+
+            <h1 class="page-title">Edit Employee</h1>
+
+            <p class="page-subtitle">
+                Update the employee information and save your changes.
+            </p>
+        </div>
+
+        <a asp-action="GetAll"
+           asp-controller="Employee"
+           class="btn btn-outline-secondary page-header-button">
+            <i class="bi bi-arrow-left"></i>
+            Back to Employees
+        </a>
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- Error Message -->
+    <!-- ========================= -->
+    @if (ViewBag.HomeMessage != null)
+    {
+        <div class="app-alert app-alert-danger">
+            <div class="app-alert-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+
+            <div>
+                <strong>Employee not found</strong>
+                <p>@ViewBag.HomeMessage</p>
+            </div>
+        </div>
+    }
+
+
+    <!-- ========================= -->
+    <!-- Edit Card -->
+    <!-- ========================= -->
+    @if (Model != null)
+    {
+        <div class="form-card">
+
+            <div class="form-card-header">
+                <div class="form-card-icon">
+                    <i class="bi bi-person-gear"></i>
+                </div>
+
+                <div>
+                    <h2>Employee Information</h2>
+                    <p>Update the information below.</p>
+                </div>
+            </div>
+
+
+            <form asp-action="SaveEditData"
+                  asp-controller="Employee"
+                  method="post"
+                  class="employee-form">
+
+                @Html.AntiForgeryToken()
+
+                <!-- Employee ID -->
+
+                <input asp-for="Id" type="hidden" />
+
+
+                <!-- ========================= -->
+                <!-- Name -->
+                <!-- ========================= -->
+
+                <div class="form-field">
+
+                    <label asp-for="Name" class="form-label">
+                        <i class="bi bi-person"></i>
+                        Employee Name
+                    </label>
+
+                    <div class="input-wrapper">
+                        <i class="bi bi-person input-icon"></i>
+
+                        <input asp-for="Name"
+                               class="form-control form-control-modern"
+                               placeholder="Enter employee name"
+                               autocomplete="off" />
+                    </div>
+
+                    <span asp-validation-for="Name"
+                          class="text-danger validation-message">
+                    </span>
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- Age -->
+                <!-- ========================= -->
+
+                <div class="form-field">
+
+                    <label asp-for="Age" class="form-label">
+                        <i class="bi bi-calendar3"></i>
+                        Age
+                    </label>
+
+                    <div class="input-wrapper">
+                        <i class="bi bi-calendar3 input-icon"></i>
+
+                        <input asp-for="Age"
+                               class="form-control form-control-modern"
+                               placeholder="Enter employee age"
+                               type="number"
+                               min="1"
+                               autocomplete="off" />
+                    </div>
+
+                    <span asp-validation-for="Age"
+                          class="text-danger validation-message">
+                    </span>
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- Buttons -->
+                <!-- ========================= -->
+
+                <div class="form-actions">
+
+                    <a asp-action="GetAll"
+                       asp-controller="Employee"
+                       class="btn btn-outline-secondary form-action-button">
+
+                        <i class="bi bi-x-lg"></i>
+                        Cancel
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="btn btn-primary form-action-button">
+
+                        <i class="bi bi-check2-circle"></i>
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    }
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

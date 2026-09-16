@@ -1,0 +1,234 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="page-shell">
+
+    <section class="dashboard-hero premium-panel">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <i class="bi bi-stars"></i>
+                Employee Management System
+            </div>
+
+            <h1>
+                Your workforce,
+                beautifully organized.
+            </h1>
+
+            <p>
+                Welcome to your employee management workspace.
+                Manage employee records, profiles, images, and session
+                information through one clean and professional interface.
+            </p>
+
+            <div class="dashboard-hero-actions">
+
+                <a asp-controller="Employee"
+                   asp-action="Dashboard"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    Open Dashboard
+
+                </a>
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-people-fill"></i>
+                    Employees
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="home-feature-grid">
+
+        <article class="premium-panel home-feature-card">
+
+            <span class="home-feature-icon gold">
+                <i class="bi bi-bar-chart-fill"></i>
+            </span>
+
+            <div>
+                <h2>Workforce Overview</h2>
+
+                <p>
+                    Review employee statistics and recent activity
+                    from your central dashboard.
+                </p>
+
+                <a asp-controller="Employee"
+                   asp-action="Dashboard"
+                   class="home-feature-link">
+
+                    Open Overview
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+            </div>
+
+        </article>
+
+
+        <article class="premium-panel home-feature-card">
+
+            <span class="home-feature-icon violet">
+                <i class="bi bi-person-plus-fill"></i>
+            </span>
+
+            <div>
+                <h2>Add an Employee</h2>
+
+                <p>
+                    Create a new employee record with a professional
+                    profile and optional image.
+                </p>
+
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="home-feature-link">
+
+                    Create Employee
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+            </div>
+
+        </article>
+
+
+        <article class="premium-panel home-feature-card">
+
+            <span class="home-feature-icon success">
+                <i class="bi bi-bookmark-star-fill"></i>
+            </span>
+
+            <div>
+                <h2>Current Session</h2>
+
+                <p>
+                    Open the employee currently stored in the
+                    application session.
+                </p>
+
+                <a asp-controller="Employee"
+                   asp-action="GetEmployeeSession"
+                   class="home-feature-link">
+
+                    View Session
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <section class="premium-panel home-info-panel">
+
+        <div class="section-card-header">
+
+            <div>
+                <h2>Workspace</h2>
+
+                <span>
+                    Employee management tools
+                </span>
+            </div>
+
+            <i class="bi bi-command"
+               style="color:var(--color-gold);"></i>
+
+        </div>
+
+
+        <div class="workspace-grid">
+
+            <a asp-controller="Employee"
+               asp-action="GetAll"
+               class="workspace-item">
+
+                <span class="workspace-item-icon">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+
+                <span>
+                    <strong>Employees</strong>
+                    <small>Browse and manage employee records.</small>
+                </span>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+
+            <a asp-controller="Employee"
+               asp-action="Create"
+               class="workspace-item">
+
+                <span class="workspace-item-icon">
+                    <i class="bi bi-person-plus-fill"></i>
+                </span>
+
+                <span>
+                    <strong>Create</strong>
+                    <small>Add a new employee profile.</small>
+                </span>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+
+            <a asp-controller="Employee"
+               asp-action="GetEmployeeSession"
+               class="workspace-item">
+
+                <span class="workspace-item-icon">
+                    <i class="bi bi-bookmark-star-fill"></i>
+                </span>
+
+                <span>
+                    <strong>Session</strong>
+                    <small>View the selected employee session.</small>
+                </span>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+
+            <a asp-controller="Home"
+               asp-action="Privacy"
+               class="workspace-item">
+
+                <span class="workspace-item-icon">
+                    <i class="bi bi-shield-check"></i>
+                </span>
+
+                <span>
+                    <strong>Privacy</strong>
+                    <small>Review privacy information.</small>
+                </span>
+
+                <i class="bi bi-chevron-right"></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>

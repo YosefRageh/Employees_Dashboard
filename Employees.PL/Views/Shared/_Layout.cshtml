@@ -1,0 +1,687 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentUser = Context.Session.GetString("UserEmail");
+}
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Employees Management</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <!-- Mobile Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ========================================================= -->
+        <!-- SIDEBAR -->
+        <!-- ========================================================= -->
+
+        <aside class="app-sidebar" id="appSidebar">
+
+            <div class="sidebar-header">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="brand">
+
+                    <span class="brand-mark">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+
+                    <span class="brand-content">
+                        <strong>Employees</strong>
+                        <small>Management System</small>
+                    </span>
+
+                </a>
+
+                <button type="button"
+                        class="sidebar-close"
+                        id="sidebarClose"
+                        aria-label="Close navigation">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <nav class="sidebar-navigation"
+                 aria-label="Main navigation">
+
+                <div class="nav-section-label">
+                    WORKSPACE
+                </div>
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="nav-item @(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+
+                    <span class="nav-icon">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                    </span>
+
+                    <span class="nav-label">
+                        Dashboard
+                    </span>
+
+                </a>
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="nav-item @(currentController == "Employee" && currentAction == "GetAll" ? "active" : "")">
+
+                    <span class="nav-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+
+                    <span class="nav-label">
+                        Employees
+                    </span>
+
+                </a>
+
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="nav-item @(currentController == "Employee" && currentAction == "Create" ? "active" : "")">
+
+                    <span class="nav-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </span>
+
+                    <span class="nav-label">
+                        Add Employee
+                    </span>
+
+                </a>
+
+                <div class="nav-section-label">
+                    SYSTEM
+                </div>
+
+                <a asp-controller="Employee"
+                   asp-action="GetEmployeeSession"
+                   class="nav-item @(currentController == "Employee" && currentAction == "GetEmployeeSession" ? "active" : "")">
+
+                    <span class="nav-icon">
+                        <i class="bi bi-bookmark-star-fill"></i>
+                    </span>
+
+                    <span class="nav-label">
+                        Session
+                    </span>
+
+                </a>
+
+                <a asp-controller="Home"
+                   asp-action="Privacy"
+                   class="nav-item @(currentAction == "Privacy" ? "active" : "")">
+
+                    <span class="nav-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </span>
+
+                    <span class="nav-label">
+                        Privacy
+                    </span>
+
+                </a>
+
+            </nav>
+
+            <div class="sidebar-spacer"></div>
+
+            <!-- System Status -->
+
+            <div class="system-status">
+
+                <span class="status-indicator"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <small>All services operational</small>
+                </div>
+
+            </div>
+
+            <!-- Sidebar User -->
+
+            <div class="sidebar-user">
+
+                <div class="user-avatar">
+                    @(string.IsNullOrWhiteSpace(currentUser)
+                        ? "U"
+                        : currentUser.Substring(0, 1).ToUpper())
+                </div>
+
+                <div class="user-details">
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(currentUser)
+                            ? "User"
+                            : currentUser)
+                    </strong>
+
+                    <span>Administrator</span>
+
+                </div>
+
+                <button type="button"
+                        class="sidebar-user-menu"
+                        id="sidebarAccountButton"
+                        aria-label="Open account menu">
+
+                    <i class="bi bi-three-dots"></i>
+
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ========================================================= -->
+        <!-- MAIN AREA -->
+        <!-- ========================================================= -->
+
+        <div class="app-main">
+
+            <!-- TOPBAR -->
+
+            <header class="app-topbar">
+
+                <div class="topbar-left">
+
+                    <button type="button"
+                            class="icon-button mobile-menu-button"
+                            id="mobileMenuButton"
+                            aria-label="Open navigation"
+                            aria-expanded="false">
+
+                        <i class="bi bi-list"></i>
+
+                    </button>
+
+                    <div class="page-context">
+
+                        <span class="page-context-label">
+                            Employee Management
+                        </span>
+
+                        <span class="page-context-separator">
+                            /
+                        </span>
+
+                        <strong>
+                            @ViewData["Title"]
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <!-- SEARCH -->
+
+                    <button type="button"
+                            class="topbar-action search-trigger"
+                            id="searchTrigger"
+                            aria-label="Search">
+
+                        <i class="bi bi-search"></i>
+
+                        <span class="search-label">
+                            Search
+                        </span>
+
+                        <kbd>Ctrl</kbd>
+                        <kbd>K</kbd>
+
+                    </button>
+
+
+                    <!-- NOTIFICATIONS -->
+
+                    <div class="dropdown-container">
+
+                        <button type="button"
+                                class="icon-button notification-trigger"
+                                id="notificationTrigger"
+                                aria-label="Notifications"
+                                aria-expanded="false">
+
+                            <i class="bi bi-bell-fill"></i>
+
+                            <span class="notification-badge"
+                                  id="notificationBadge">
+                                3
+                            </span>
+
+                        </button>
+
+                        <div class="dropdown-panel notification-panel"
+                             id="notificationPanel">
+
+                            <div class="dropdown-header">
+
+                                <div>
+                                    <strong>Notifications</strong>
+                                    <span>Recent system activity</span>
+                                </div>
+
+                                <button type="button"
+                                        class="text-button"
+                                        id="markAllRead">
+                                    Mark all as read
+                                </button>
+
+                            </div>
+
+                            <div class="notification-list"
+                                 id="notificationList">
+
+                                <button type="button"
+                                        class="notification-item unread">
+
+                                    <span class="notification-icon gold">
+                                        <i class="bi bi-person-plus-fill"></i>
+                                    </span>
+
+                                    <span class="notification-content">
+
+                                        <strong>
+                                            Employee added
+                                        </strong>
+
+                                        <span>
+                                            A new employee was added.
+                                        </span>
+
+                                        <small>
+                                            Just now
+                                        </small>
+
+                                    </span>
+
+                                </button>
+
+                                <button type="button"
+                                        class="notification-item unread">
+
+                                    <span class="notification-icon violet">
+                                        <i class="bi bi-image-fill"></i>
+                                    </span>
+
+                                    <span class="notification-content">
+
+                                        <strong>
+                                            Profile image updated
+                                        </strong>
+
+                                        <span>
+                                            Employee information changed.
+                                        </span>
+
+                                        <small>
+                                            12 min ago
+                                        </small>
+
+                                    </span>
+
+                                </button>
+
+                                <button type="button"
+                                        class="notification-item unread">
+
+                                    <span class="notification-icon success">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </span>
+
+                                    <span class="notification-content">
+
+                                        <strong>
+                                            System ready
+                                        </strong>
+
+                                        <span>
+                                            All application services are running.
+                                        </span>
+
+                                        <small>
+                                            1 hour ago
+                                        </small>
+
+                                    </span>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- THEME -->
+
+                    <button type="button"
+                            class="icon-button"
+                            id="themeToggle"
+                            aria-label="Toggle theme">
+
+                        <i class="bi bi-moon-stars-fill"
+                           id="themeIcon"></i>
+
+                    </button>
+
+
+                    <!-- ACCOUNT -->
+
+                    <div class="dropdown-container account-container">
+
+                        <button type="button"
+                                class="account-trigger"
+                                id="accountTrigger"
+                                aria-expanded="false">
+
+                            <span class="topbar-avatar">
+                                @(string.IsNullOrWhiteSpace(currentUser)
+                                    ? "U"
+                                    : currentUser.Substring(0, 1).ToUpper())
+                            </span>
+
+                            <span class="account-trigger-info">
+
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(currentUser)
+                                        ? "User"
+                                        : currentUser)
+                                </strong>
+
+                                <small>
+                                    Administrator
+                                </small>
+
+                            </span>
+
+                            <i class="bi bi-chevron-down account-chevron"></i>
+
+                        </button>
+
+                        <div class="dropdown-panel account-panel"
+                             id="accountPanel">
+
+                            <div class="account-header">
+
+                                <div class="large-avatar">
+                                    @(string.IsNullOrWhiteSpace(currentUser)
+                                        ? "U"
+                                        : currentUser.Substring(0, 1).ToUpper())
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        @(string.IsNullOrWhiteSpace(currentUser)
+                                            ? "User"
+                                            : currentUser)
+                                    </strong>
+
+                                    <span>Administrator</span>
+
+                                    <small>
+                                        <span class="online-dot"></span>
+                                        Active account
+                                    </small>
+                                </div>
+
+                            </div>
+
+                            <div class="dropdown-divider"></div>
+
+                            <a asp-controller="Home"
+                               asp-action="Index"
+                               class="account-menu-item">
+
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                Dashboard
+
+                            </a>
+
+                            <a asp-controller="Employee"
+                               asp-action="GetAll"
+                               class="account-menu-item">
+
+                                <i class="bi bi-people-fill"></i>
+                                Employees
+
+                            </a>
+
+                            <a asp-controller="Employee"
+                               asp-action="GetEmployeeSession"
+                               class="account-menu-item">
+
+                                <i class="bi bi-bookmark-star-fill"></i>
+                                Session
+
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <form asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="account-logout-form">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="account-menu-item danger account-logout-button">
+
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    Logout
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- CONTENT -->
+
+            <main class="app-content">
+
+                <div class="content-container">
+
+                    @RenderBody()
+
+                </div>
+
+            </main>
+
+
+            <!-- FOOTER -->
+
+            <footer class="app-footer">
+
+                <span>
+                    © @DateTime.Now.Year Employees Management System
+                </span>
+
+                <span class="footer-divider">•</span>
+
+                <span>
+                    Built for modern workforce management
+                </span>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================= -->
+    <!-- SEARCH OVERLAY -->
+    <!-- ============================================================= -->
+
+    <div class="search-overlay"
+         id="searchOverlay"
+         aria-hidden="true">
+
+        <div class="search-backdrop"
+             id="searchBackdrop"></div>
+
+        <section class="search-dialog"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="searchTitle">
+
+            <div class="search-dialog-header">
+
+                <div class="search-dialog-title">
+
+                    <span class="search-dialog-icon">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <div>
+                        <h2 id="searchTitle">
+                            Search
+                        </h2>
+
+                        <span>
+                            Find your way around the application
+                        </span>
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="icon-button"
+                        id="searchClose"
+                        aria-label="Close search">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+            <div class="search-input-wrapper">
+
+                <i class="bi bi-search"></i>
+
+                <input type="search"
+                       id="globalSearchInput"
+                       placeholder="Search employees, pages..."
+                       autocomplete="off" />
+
+                <kbd>ESC</kbd>
+
+            </div>
+
+            <div class="search-hint">
+
+                <i class="bi bi-lightbulb"></i>
+
+                <span>
+                    Press <strong>Ctrl + K</strong> anytime to open search.
+                </span>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ============================================================= -->
+    <!-- ROBOT ASSISTANT -->
+    <!-- ============================================================= -->
+
+    <div class="robot-assistant"
+         id="robotAssistant">
+
+        <div class="robot-speech"
+             id="robotSpeech">
+            Hi! Welcome back 👋
+        </div>
+
+        <button type="button"
+                class="robot"
+                id="robotButton"
+                aria-label="Open assistant">
+
+            <span class="robot-antenna">
+                <span></span>
+            </span>
+
+            <span class="robot-head">
+
+                <span class="robot-ear left"></span>
+                <span class="robot-ear right"></span>
+
+                <span class="robot-face">
+
+                    <span class="robot-eyes">
+                        <span class="robot-eye"></span>
+                        <span class="robot-eye"></span>
+                    </span>
+
+                    <span class="robot-mouth"></span>
+
+                </span>
+
+            </span>
+
+            <span class="robot-body">
+
+                <span class="robot-chest">
+                    <i class="bi bi-stars"></i>
+                </span>
+
+                <span class="robot-arm robot-arm-left"></span>
+
+                <span class="robot-arm robot-arm-right">
+
+                    <span class="robot-hand"></span>
+
+                </span>
+
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

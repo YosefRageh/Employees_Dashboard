@@ -1,0 +1,518 @@
+﻿@model Employees.BLL.Models.EmployeeVM.CreateEmployeeVM
+
+@{
+    ViewData["Title"] = "Create Employee";
+}
+
+<div class="page-shell">
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <div class="page-eyebrow">
+                <i class="bi bi-person-plus-fill"></i>
+                Employee Workspace
+            </div>
+
+            <h1>Create Employee</h1>
+
+            <p>
+                Add a new employee to your management system with
+                their basic information and an optional profile image.
+            </p>
+
+        </div>
+
+        <div class="page-actions">
+
+            <a asp-controller="Employee"
+               asp-action="GetAll"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to Employees
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="auth-alert"
+             style="margin-bottom:18px;">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @ViewBag.ErrorMessage
+            </span>
+
+        </div>
+    }
+
+
+    <div class="auth-validation-summary">
+        @Html.ValidationSummary(
+            false,
+            "",
+            new
+            {
+                @class = "validation-summary-errors"
+            })
+    </div>
+
+
+    <form asp-controller="Employee"
+          asp-action="SaveData"
+          method="post"
+          enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-layout">
+
+
+            <!-- ================================================= -->
+            <!-- EMPLOYEE INFORMATION -->
+            <!-- ================================================= -->
+
+            <section class="premium-panel form-panel">
+
+                <div class="form-panel-header">
+
+                    <h2>
+                        Employee Information
+                    </h2>
+
+                    <p>
+                        Enter the employee details below and submit
+                        the form when everything is ready.
+                    </p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- AGE -->
+
+                    <div class="form-group">
+
+                        <label for="Age"
+                               class="form-label">
+
+                            Age
+
+                        </label>
+
+
+                        <div class="input-with-icon">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <input id="Age"
+                                   name="Age"
+                                   type="number"
+                                   min="19"
+                                   max="60"
+                                   class="form-control"
+                                   placeholder="Enter employee age"
+                                   value="@(Context.Request.HasFormContentType
+                                                                ? Context.Request.Form["Age"].ToString()
+                                                            : "")" />
+
+                        </div>
+
+
+                        <span class="field-validation-error">
+                            @Html.ValidationMessage(
+                                "Age",
+                                "",
+                                new
+                                {
+                                    @class = "field-validation-error"
+                                })
+                        </span>
+
+                    </div>
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group full">
+
+                        <label for="Name"
+                               class="form-label">
+
+                            Employee Name
+
+                        </label>
+
+
+                        <div class="input-with-icon">
+
+                            <i class="bi bi-person-fill"></i>
+
+                            <input id="Name"
+                                   name="Name"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="Enter employee full name"
+                                   autocomplete="name"
+                                   value="@(Context.Request.HasFormContentType
+                                                                ? Context.Request.Form["Name"].ToString()
+                                                            : "")" />
+
+                        </div>
+
+
+                        <span class="field-validation-error">
+                            @Html.ValidationMessage(
+                                "Name",
+                                "",
+                                new
+                                {
+                                    @class = "field-validation-error"
+                                })
+                        </span>
+
+                    </div>
+
+
+                    <!-- IMAGE -->
+
+                    <div class="form-group full">
+
+                        <label for="Image"
+                               class="form-label">
+
+                            Profile Image
+
+                        </label>
+
+
+                        <div class="upload-zone"
+                             id="uploadZone">
+
+
+                            <div class="upload-icon">
+
+                                <i class="bi bi-cloud-arrow-up"></i>
+
+                            </div>
+
+
+                            <strong>
+                                Upload employee image
+                            </strong>
+
+
+                            <span>
+                                Choose an image from your computer.
+                            </span>
+
+
+                            <label for="Image"
+                                   class="btn btn-secondary"
+                                   style="
+                                margin-top:14px;
+                                cursor:pointer;">
+
+                                <i class="bi bi-image"></i>
+
+                                Choose Image
+
+                            </label>
+
+
+                            <input id="Image"
+                                   name="Image"
+                                   type="file"
+                                   accept="image/*"
+                                   style="display:none;" />
+
+
+                            <small id="selectedFileName">
+                                No image selected
+                            </small>
+
+
+                        </div>
+
+
+                        <span class="field-validation-error">
+                            @Html.ValidationMessage(
+                                "Image",
+                                "",
+                                new
+                                {
+                                    @class = "field-validation-error"
+                                })
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Create Employee
+
+                    </button>
+
+
+                    <a asp-controller="Employee"
+                       asp-action="GetAll"
+                       class="btn btn-secondary">
+
+                        <i class="bi bi-x-lg"></i>
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- IMAGE PREVIEW -->
+            <!-- ================================================= -->
+
+            <aside class="premium-panel form-panel">
+
+                <div class="form-panel-header">
+
+                    <h2>
+                        Image Preview
+                    </h2>
+
+                    <p>
+                        Your selected image will appear here before
+                        submitting the employee form.
+                    </p>
+
+                </div>
+
+
+                <div class="image-preview-panel">
+
+
+                    <div id="createEmptyImage"
+                         class="empty-image-state">
+
+                        <i class="bi bi-person-square"></i>
+
+                        <span>
+                            No image selected
+                        </span>
+
+                    </div>
+
+
+                    <img id="createImagePreview"
+                         src=""
+                         alt="Employee preview"
+                         style="display:none;" />
+
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </form>
+
+
+</div>
+
+@section Scripts {
+
+    
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const imageInput =
+                    document.getElementById("Image");
+
+                const imagePreview =
+                    document.getElementById(
+                        "createImagePreview"
+                    );
+
+                const emptyState =
+                    document.getElementById(
+                        "createEmptyImage"
+                    );
+
+                const selectedFileName =
+                    document.getElementById(
+                        "selectedFileName"
+                    );
+
+                const uploadZone =
+                    document.getElementById(
+                        "uploadZone"
+                    );
+
+
+                if (!imageInput) {
+                    return;
+                }
+
+
+                imageInput.addEventListener(
+                    "change",
+                    function () {
+
+                        const file =
+                            this.files &&
+                            this.files[0];
+
+
+                        if (!file) {
+
+                            imagePreview.style.display =
+                                "none";
+
+                            imagePreview.removeAttribute(
+                                "src"
+                            );
+
+                            emptyState.style.display =
+                                "flex";
+
+                            selectedFileName.textContent =
+                                "No image selected";
+
+                            return;
+                        }
+
+
+                        selectedFileName.textContent =
+                            file.name;
+
+
+                        const reader =
+                            new FileReader();
+
+
+                        reader.onload =
+                            function (event) {
+
+                                imagePreview.src =
+                                    event.target.result;
+
+                                imagePreview.style.display =
+                                    "block";
+
+                                emptyState.style.display =
+                                    "none";
+
+                            };
+
+
+                        reader.readAsDataURL(file);
+
+                    }
+                );
+
+
+                if (uploadZone) {
+
+                    uploadZone.addEventListener(
+                        "dragover",
+                        function (event) {
+
+                            event.preventDefault();
+
+                            uploadZone.classList.add(
+                                "dragging"
+                            );
+
+                        }
+                    );
+
+
+                    uploadZone.addEventListener(
+                        "dragleave",
+                        function () {
+
+                            uploadZone.classList.remove(
+                                "dragging"
+                            );
+
+                        }
+                    );
+
+
+                    uploadZone.addEventListener(
+                        "drop",
+                        function (event) {
+
+                            event.preventDefault();
+
+                            uploadZone.classList.remove(
+                                "dragging"
+                            );
+
+
+                            const files =
+                                event.dataTransfer &&
+                                event.dataTransfer.files;
+
+
+                            if (
+                                !files ||
+                                files.length === 0
+                            ) {
+                                return;
+                            }
+
+
+                            imageInput.files =
+                                files;
+
+
+                            imageInput.dispatchEvent(
+                                new Event(
+                                    "change",
+                                    {
+                                        bubbles: true
+                                    }
+                                )
+                            );
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
+   
+
+}

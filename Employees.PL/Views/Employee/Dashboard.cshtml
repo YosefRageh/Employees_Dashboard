@@ -1,0 +1,532 @@
+﻿@using Employees.BLL.Models.EmployeeVM
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    int totalEmployees =
+        ViewBag.TotalEmployees ?? 0;
+
+    int employeesWithImages =
+        ViewBag.EmployeesWithImages ?? 0;
+
+    int employeesWithoutImages =
+        ViewBag.EmployeesWithoutImages ?? 0;
+
+    var averageAge =
+        ViewBag.AverageAge ?? 0;
+
+    var recentEmployees =
+        ViewBag.RecentEmployees as List<GetAllEmployeeVM>
+        ?? new List<GetAllEmployeeVM>();
+
+    double imagePercentage =
+        totalEmployees > 0
+            ? (double)employeesWithImages / totalEmployees * 100
+            : 0;
+}
+
+<div class="page-shell">
+
+    <section class="dashboard-hero premium-panel">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <i class="bi bi-grid-1x2-fill"></i>
+                Employee Management Dashboard
+            </div>
+
+            <h1>
+                Your workforce,
+                at a glance.
+            </h1>
+
+            <p>
+                Monitor your employee records, profile coverage,
+                and recent activity from your central management workspace.
+            </p>
+
+            <div class="dashboard-hero-actions">
+
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-person-plus-fill"></i>
+                    Add Employee
+
+                </a>
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="btn btn-secondary">
+
+                    <i class="bi bi-people-fill"></i>
+                    View Employees
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Statistics -->
+
+    <section class="stats-grid">
+
+        <article class="premium-card stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+
+                <span class="stats-meta">
+                    <i class="bi bi-database"></i>
+                    Records
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                @totalEmployees
+            </div>
+
+            <div class="stat-label">
+                Total Employees
+            </div>
+
+        </article>
+
+
+        <article class="premium-card stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </span>
+
+                <span class="stats-meta">
+                    <i class="bi bi-calculator"></i>
+                    Analytics
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                @averageAge
+            </div>
+
+            <div class="stat-label">
+                Average Age
+            </div>
+
+        </article>
+
+
+        <article class="premium-card stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon">
+                    <i class="bi bi-image-fill"></i>
+                </span>
+
+                <span class="stats-meta"
+                      style="color:var(--color-success);">
+
+                    <i class="bi bi-check-circle-fill"></i>
+                    Available
+
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                @employeesWithImages
+            </div>
+
+            <div class="stat-label">
+                Employees With Images
+            </div>
+
+        </article>
+
+
+        <article class="premium-card stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon">
+                    <i class="bi bi-image"></i>
+                </span>
+
+                <span class="stats-meta">
+                    <i class="bi bi-person"></i>
+                    Profiles
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                @employeesWithoutImages
+            </div>
+
+            <div class="stat-label">
+                Employees Without Images
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- Main Grid -->
+
+    <section class="dashboard-grid">
+
+        <article class="premium-panel section-card">
+
+            <div class="section-card-header">
+
+                <div>
+                    <h2>Recent Employees</h2>
+                    <span>
+                        Latest records in the system
+                    </span>
+                </div>
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="text-button">
+
+                    View All
+
+                </a>
+
+            </div>
+
+
+            @if (recentEmployees.Count > 0)
+            {
+                <div class="employee-mini-list">
+
+                    @foreach (var employee in recentEmployees)
+                    {
+                        var employeeName =
+                            string.IsNullOrWhiteSpace(employee.Name)
+                                ? "Unnamed Employee"
+                                : employee.Name;
+
+                        var initial =
+                            employeeName.Substring(0, 1).ToUpper();
+
+
+                        <a asp-controller="Employee"
+                           asp-action="Edit"
+                           asp-route-id="@employee.ID"
+                           class="employee-mini-item">
+
+
+                            <span class="employee-avatar">
+
+                                @if (!string.IsNullOrWhiteSpace(employee.PathImage))
+                                {
+                                    <img src="~/Files/@employee.PathImage"
+                                         alt="@employeeName"
+                                         loading="lazy" />
+                                }
+                                else
+                                {
+                                    @initial
+                                }
+
+                            </span>
+
+
+                            <span class="employee-mini-copy">
+
+                                <strong>
+                                    @employeeName
+                                </strong>
+
+                                <span>
+                                    ID #@employee.ID
+                                    ·
+                                    Age @employee.Age
+                                </span>
+
+                            </span>
+
+
+                            <span class="employee-mini-action">
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </span>
+
+                        </a>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="empty-state"
+                     style="min-height:220px;">
+
+                    <span class="empty-state-icon">
+                        <i class="bi bi-people"></i>
+                    </span>
+
+                    <h2>
+                        No Employees Yet
+                    </h2>
+
+                    <p>
+                        Add your first employee to start building
+                        your workforce directory.
+                    </p>
+
+                    <a asp-controller="Employee"
+                       asp-action="Create"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-person-plus-fill"></i>
+                        Add Employee
+
+                    </a>
+
+                </div>
+            }
+
+        </article>
+
+
+        <article class="premium-panel section-card">
+
+            <div class="section-card-header">
+
+                <div>
+                    <h2>Quick Actions</h2>
+
+                    <span>
+                        Common operations
+                    </span>
+                </div>
+
+                <i class="bi bi-lightning-charge-fill"
+                   style="color:var(--color-gold);"></i>
+
+            </div>
+
+
+            <div class="quick-action-grid">
+
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="quick-action">
+
+                    <span class="quick-action-icon">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </span>
+
+                    <span class="quick-action-text">
+
+                        <strong>
+                            Add Employee
+                        </strong>
+
+                        <span>
+                            Create a new profile.
+                        </span>
+
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="quick-action">
+
+                    <span class="quick-action-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+
+                    <span class="quick-action-text">
+
+                        <strong>
+                            Employees
+                        </strong>
+
+                        <span>
+                            Manage all employee records.
+                        </span>
+
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="Employee"
+                   asp-action="GetEmployeeSession"
+                   class="quick-action">
+
+                    <span class="quick-action-icon">
+                        <i class="bi bi-bookmark-star-fill"></i>
+                    </span>
+
+                    <span class="quick-action-text">
+
+                        <strong>
+                            Session
+                        </strong>
+
+                        <span>
+                            Open selected employee.
+                        </span>
+
+                    </span>
+
+                </a>
+
+
+                <a asp-controller="Home"
+                   asp-action="Privacy"
+                   class="quick-action">
+
+                    <span class="quick-action-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </span>
+
+                    <span class="quick-action-text">
+
+                        <strong>
+                            Privacy
+                        </strong>
+
+                        <span>
+                            Application information.
+                        </span>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- Bottom Grid -->
+
+    <section class="dashboard-grid-bottom">
+
+        <article class="premium-panel section-card">
+
+            <div class="section-card-header">
+
+                <div>
+                    <h2>Profile Coverage</h2>
+
+                    <span>
+                        Employee image availability
+                    </span>
+
+                </div>
+
+                <i class="bi bi-person-bounding-box"
+                   style="color:var(--color-violet);"></i>
+
+            </div>
+
+
+            <div class="stats-meta">
+
+                <i class="bi bi-image-fill"></i>
+
+                <span>
+                    @employeesWithImages of @totalEmployees
+                    employees have profile images.
+                </span>
+
+            </div>
+
+
+            <div class="stat-progress">
+
+                <div class="progress-label">
+
+                    <span>
+                        Image coverage
+                    </span>
+
+                    <span>
+                        @imagePercentage.ToString("0")%
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div class="progress-value"
+                         style="width:@imagePercentage.ToString(System.Globalization.CultureInfo.InvariantCulture)%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="premium-panel section-card">
+
+            <div class="section-card-header">
+
+                <div>
+                    <h2>System Status</h2>
+
+                    <span>
+                        Current application state
+                    </span>
+
+                </div>
+
+                <span class="status-indicator"></span>
+
+            </div>
+
+
+            <div class="system-status"
+                 style="margin:0;">
+
+                <span class="status-indicator"></span>
+
+                <div>
+
+                    <strong>
+                        Application Online
+                    </strong>
+
+                    <small>
+                        Employee management workspace is operational.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</div>

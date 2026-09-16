@@ -1,0 +1,223 @@
+﻿@model Employees.BLL.Models.EmployeeVM.GetAllEmployeeVM
+
+@{
+    ViewData["Title"] = "Employee Session";
+
+    var hasEmployee = Model != null;
+
+    var employeeName =
+        hasEmployee &&
+        !string.IsNullOrWhiteSpace(Model.Name)
+            ? Model.Name
+            : "Employee";
+
+    var initial =
+        employeeName.Substring(0, 1).ToUpper();
+
+    var hasImage =
+        hasEmployee &&
+        !string.IsNullOrWhiteSpace(Model.PathImage);
+}
+
+<div class="page-shell">
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <div class="page-eyebrow">
+                <i class="bi bi-bookmark-star-fill"></i>
+                Active Session
+            </div>
+
+            <h1>
+                Employee Session
+            </h1>
+
+            <p>
+                View the employee currently stored in the application
+                session.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <a asp-controller="Employee"
+               asp-action="GetAll"
+               class="btn btn-secondary">
+
+                <i class="bi bi-people-fill"></i>
+
+                Manage Employees
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    @if (!hasEmployee)
+    {
+        <section class="empty-state"
+                 style="min-height:430px;">
+
+            <span class="empty-state-icon">
+
+                <i class="bi bi-person-lock"></i>
+
+            </span>
+
+
+            <h2>
+                No Employee In Session
+            </h2>
+
+
+            <p>
+                No employee is currently stored in the application session.
+                Select an employee from the directory to create a session.
+            </p>
+
+
+            <a asp-controller="Employee"
+               asp-action="GetAll"
+               class="btn btn-primary">
+
+                <i class="bi bi-people-fill"></i>
+
+                Open Employees
+
+            </a>
+
+        </section>
+    }
+    else
+    {
+        <section class="premium-panel"
+                 style="
+            padding:clamp(22px,4vw,40px);">
+
+            <div class="session-layout">
+
+
+                <div class="session-profile">
+
+                    @if (hasImage)
+                    {
+                        <img src="~/Files/@Model.PathImage"
+                             alt="@employeeName"
+                             class="session-image" />
+                    }
+                    else
+                    {
+                        <div class="employee-avatar session-avatar">
+                            @initial
+                        </div>
+                    }
+
+                </div>
+
+
+                <div class="session-details">
+
+                    <div class="page-eyebrow">
+
+                        <i class="bi bi-circle-fill"></i>
+
+                        Session Active
+
+                    </div>
+
+
+                    <h2>
+                        @employeeName
+                    </h2>
+
+
+                    <p>
+                        This employee profile is currently stored
+                        in the application session.
+                    </p>
+
+
+                    <div class="session-stat-grid">
+
+
+                        <div class="premium-card session-stat">
+
+                            <span>
+                                Employee ID
+                            </span>
+
+                            <strong>
+                                #@Model.ID
+                            </strong>
+
+                        </div>
+
+
+                        <div class="premium-card session-stat">
+
+                            <span>
+                                Age
+                            </span>
+
+                            <strong>
+                                @Model.Age
+                            </strong>
+
+                        </div>
+
+
+                        <div class="premium-card session-stat">
+
+                            <span>
+                                Session
+                            </span>
+
+                            <strong class="session-active-text">
+                                Active
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <a asp-controller="Employee"
+                           asp-action="Edit"
+                           asp-route-id="@Model.ID"
+                           class="btn btn-primary">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                            Edit Employee
+
+                        </a>
+
+
+                        <a asp-controller="Employee"
+                           asp-action="GetAll"
+                           class="btn btn-secondary">
+
+                            <i class="bi bi-people"></i>
+
+                            Employee Directory
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    }
+
+</div>

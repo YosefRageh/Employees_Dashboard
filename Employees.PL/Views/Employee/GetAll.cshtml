@@ -1,0 +1,631 @@
+﻿@model List<Employees.BLL.Models.EmployeeVM.GetAllEmployeeVM>
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<div class="page-shell">
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <div class="page-eyebrow">
+                <i class="bi bi-people-fill"></i>
+                Workforce Directory
+            </div>
+
+            <h1>
+                Employees
+            </h1>
+
+            <p>
+                Manage employee profiles, personal information,
+                images, and available actions.
+            </p>
+
+        </div>
+
+
+        <div class="page-actions">
+
+            <span class="stats-meta">
+                <i class="bi bi-database"></i>
+                @Model.Count employee@(Model.Count == 1 ? "" : "s")
+            </span>
+
+            <a asp-controller="Employee"
+               asp-action="Create"
+               class="btn btn-primary">
+
+                <i class="bi bi-person-plus-fill"></i>
+
+                Add Employee
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Search -->
+
+    <section class="premium-panel employee-toolbar-panel">
+
+        <div class="employee-toolbar">
+
+            <label class="employee-search"
+                   for="employeeSearch">
+
+                <i class="bi bi-search"></i>
+
+                <input id="employeeSearch"
+                       type="search"
+                       placeholder="Search by ID, name or age..."
+                       autocomplete="off" />
+
+            </label>
+
+
+            <span id="employeeResultCount"
+                  class="stats-meta">
+
+                <i class="bi bi-funnel"></i>
+
+                @Model.Count results
+
+            </span>
+
+        </div>
+
+    </section>
+
+
+    @if (Model.Count > 0)
+    {
+        <section class="employee-table-wrapper">
+
+            <table class="employee-table"
+                   id="employeeTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Employee
+                        </th>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Age
+                        </th>
+
+                        <th>
+                            Profile
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var employee in Model)
+                    {
+                        var employeeName =
+                            string.IsNullOrWhiteSpace(employee.Name)
+                                ? "Unnamed Employee"
+                                : employee.Name;
+
+                        var hasImage =
+                            !string.IsNullOrWhiteSpace(
+                                employee.PathImage
+                            );
+
+                        var initial =
+                            employeeName.Substring(
+                                0,
+                                1
+                            ).ToUpper();
+
+
+                        <tr class="employee-row"
+                            data-search="@employee.ID @employeeName @employee.Age">
+
+
+                            <td>
+
+                                <div class="employee-profile">
+
+                                    <span class="employee-avatar">
+
+                                        @if (hasImage)
+                                        {
+                                            <img src="~/Files/@employee.PathImage"
+                                                 alt="@employeeName"
+                                                 loading="lazy" />
+                                        }
+                                        else
+                                        {
+                                            @initial
+                                        }
+
+                                    </span>
+
+
+                                    <span class="employee-profile-info">
+
+                                        <strong>
+                                            @employeeName
+                                        </strong>
+
+                                        <span>
+                                            Employee profile
+                                        </span>
+
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                #@employee.ID
+                            </td>
+
+
+                            <td>
+                                @employee.Age
+                            </td>
+
+
+                            <td>
+
+                                @if (hasImage)
+                                {
+                                    <span class="stats-meta"
+                                          style="color:var(--color-success);">
+
+                                        <i class="bi bi-check-circle-fill"></i>
+
+                                        Image available
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="stats-meta">
+
+                                        <i class="bi bi-image"></i>
+
+                                        No Image
+
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="action-group">
+
+
+                                    <!-- View Image -->
+                                    @if (hasImage)
+                                    {
+                                        <button type="button"
+                                                class="action-button image-preview-button"
+                                                data-tooltip="View image"
+                                                data-image="@Url.Content("~/Files/" + employee.PathImage)"
+                                                data-name="@employeeName"
+                                                aria-label="View image for @employeeName">
+
+                                            <i class="bi bi-eye-fill"></i>
+
+                                        </button>
+
+
+                                        <!-- Download -->
+
+                                        <a asp-controller="Employee"
+                                           asp-action="DownloadImage"
+                                           asp-route-id="@employee.ID"
+                                           class="action-button"
+                                           data-tooltip="Download image"
+                                           aria-label="Download image for @employeeName">
+
+                                            <i class="bi bi-download"></i>
+
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <button type="button"
+                                                class="action-button"
+                                                disabled
+                                                data-tooltip="No image available"
+                                                aria-label="No image available"
+                                                style="opacity:.35; cursor:not-allowed;">
+
+                                            <i class="bi bi-image"></i>
+
+                                        </button>
+                                    }
+
+
+                                    <!-- Edit -->
+
+                                    <a asp-controller="Employee"
+                                       asp-action="Edit"
+                                       asp-route-id="@employee.ID"
+                                       class="action-button"
+                                       data-tooltip="Edit employee"
+                                       aria-label="Edit @employeeName">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+
+                                    <!-- Delete -->
+
+                                    <form asp-controller="Employee"
+                                          asp-action="Delete"
+                                          asp-route-id="@employee.ID"
+                                          method="post"
+                                          class="delete-form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="action-button danger"
+                                                data-tooltip="Delete employee"
+                                                aria-label="Delete @employeeName">
+
+                                            <i class="bi bi-trash3-fill"></i>
+
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </section>
+    }
+    else
+    {
+        <section class="empty-state">
+
+            <span class="empty-state-icon">
+                <i class="bi bi-people"></i>
+            </span>
+
+            <h2>
+                No Employees Yet
+            </h2>
+
+            <p>
+                Your employee directory is currently empty.
+                Add your first employee to get started.
+            </p>
+
+            <a asp-controller="Employee"
+               asp-action="Create"
+               class="btn btn-primary">
+
+                <i class="bi bi-person-plus-fill"></i>
+
+                Add Employee
+
+            </a>
+
+        </section>
+    }
+
+</div>
+
+
+<!-- Image Modal -->
+
+<div class="image-modal-overlay"
+     id="employeeImageModal"
+     aria-hidden="true">
+
+    <div class="image-modal-backdrop"></div>
+
+    <div class="image-modal">
+
+        <div class="image-modal-header">
+
+            <div>
+
+                <span class="page-eyebrow">
+                    Employee Profile
+                </span>
+
+                <h2 id="employeeImageName">
+                    Employee Image
+                </h2>
+
+            </div>
+
+
+            <button type="button"
+                    class="icon-button"
+                    id="closeEmployeeImage"
+                    aria-label="Close image preview">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="image-modal-body">
+
+            <img id="employeeModalImage"
+                 src=""
+                 alt="" />
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const search =
+                    document.getElementById(
+                        "employeeSearch"
+                    );
+
+                const rows =
+                    Array.from(
+                        document.querySelectorAll(
+                            ".employee-row"
+                        )
+                    );
+
+                const resultCount =
+                    document.getElementById(
+                        "employeeResultCount"
+                    );
+
+
+                if (search) {
+
+                    search.addEventListener(
+                        "input",
+                        function () {
+
+                            const query =
+                                this.value
+                                    .trim()
+                                    .toLowerCase();
+
+
+                            let visible = 0;
+
+
+                            rows.forEach(
+                                function (row) {
+
+                                    const data =
+                                        (
+                                            row.dataset.search ||
+                                            ""
+                                        ).toLowerCase();
+
+
+                                    const match =
+                                        query === "" ||
+                                        data.includes(query);
+
+
+                                    row.style.display =
+                                        match ? "" : "none";
+
+
+                                    if (match) {
+                                        visible++;
+                                    }
+
+                                }
+                            );
+
+
+                            if (resultCount) {
+
+                                resultCount.innerHTML =
+                                    `<i class="bi bi-funnel"></i> ${visible} result${visible === 1 ? "" : "s"}`;
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                const modal =
+                    document.getElementById(
+                        "employeeImageModal"
+                    );
+
+                const modalImage =
+                    document.getElementById(
+                        "employeeModalImage"
+                    );
+
+                const modalName =
+                    document.getElementById(
+                        "employeeImageName"
+                    );
+
+                const closeButton =
+                    document.getElementById(
+                        "closeEmployeeImage"
+                    );
+
+
+                function closeModal() {
+
+                    modal.classList.remove("open");
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    modalImage.src = "";
+
+                    document.body.style.overflow = "";
+
+                }
+
+
+                document
+                    .querySelectorAll(
+                        ".image-preview-button"
+                    )
+                    .forEach(
+                        function (button) {
+
+                            button.addEventListener(
+                                "click",
+                                function () {
+
+                                    modalImage.src =
+                                        this.dataset.image;
+
+                                    modalImage.alt =
+                                        this.dataset.name;
+
+                                    modalName.textContent =
+                                        this.dataset.name;
+
+                                    modal.classList.add("open");
+
+                                    modal.setAttribute(
+                                        "aria-hidden",
+                                        "false"
+                                    );
+
+                                    document.body.style.overflow =
+                                        "hidden";
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                closeButton?.addEventListener(
+                    "click",
+                    closeModal
+                );
+
+
+                modal?.querySelector(
+                    ".image-modal-backdrop"
+                )?.addEventListener(
+                    "click",
+                    closeModal
+                );
+
+
+                document
+                    .querySelectorAll(".delete-form")
+                    .forEach(
+                        function (form) {
+
+                            form.addEventListener(
+                                "submit",
+                                function (event) {
+
+                                    const row =
+                                        this.closest(
+                                            ".employee-row"
+                                        );
+
+                                    const name =
+                                        row
+                                            ?.querySelector(
+                                                ".employee-profile-info strong"
+                                            )
+                                            ?.textContent
+                                            ?.trim()
+                                        || "this employee";
+
+
+                                    if (
+                                        !confirm(
+                                            `Delete ${name}? This action cannot be undone.`
+                                        )
+                                    ) {
+
+                                        event.preventDefault();
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                document.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.key === "Escape" &&
+                            modal.classList.contains("open")
+                        ) {
+
+                            closeModal();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+}

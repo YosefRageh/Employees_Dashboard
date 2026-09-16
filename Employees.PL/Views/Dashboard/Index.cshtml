@@ -1,0 +1,786 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+
+    var totalEmployees = (int)(ViewBag.TotalEmployees ?? 0);
+    var averageAge = (double)(ViewBag.AverageAge ?? 0);
+    var withImages = (int)(ViewBag.WithImages ?? 0);
+    var withoutImages = (int)(ViewBag.WithoutImages ?? 0);
+
+    var imagePercentage = totalEmployees == 0
+        ? 0
+        : Math.Round((double)withImages / totalEmployees * 100);
+
+    var recentEmployees = ViewBag.RecentEmployees as List<Employees.DAL.Entities.Employee>
+                          ?? new List<Employees.DAL.Entities.Employee>();
+}
+
+<div class="dashboard-page">
+
+    <!-- ========================= -->
+    <!-- Dashboard Hero -->
+    <!-- ========================= -->
+
+    <section class="dashboard-hero">
+
+        <div class="dashboard-hero-content">
+
+            <span class="dashboard-eyebrow">
+                <i class="bi bi-stars"></i>
+                Employee Management
+            </span>
+
+            <h1>
+                Welcome to your
+                <span>Dashboard</span>
+            </h1>
+
+            <p>
+                Manage your employees, images and session data
+                from one professional workspace.
+            </p>
+
+            <div class="dashboard-hero-actions">
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="dashboard-primary-button">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <span>View Employees</span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="dashboard-secondary-button">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    <span>Add Employee</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="dashboard-hero-visual">
+
+            <div class="hero-orbit orbit-one"></div>
+            <div class="hero-orbit orbit-two"></div>
+
+            <div class="hero-icon-circle">
+
+                <i class="bi bi-people-fill"></i>
+
+            </div>
+
+            <div class="hero-floating-card hero-floating-card-one">
+
+                <span class="hero-floating-icon success">
+                    <i class="bi bi-check-circle-fill"></i>
+                </span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <small>Everything is running</small>
+                </div>
+
+            </div>
+
+            <div class="hero-floating-card hero-floating-card-two">
+
+                <span class="hero-floating-icon primary">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </span>
+
+                <div>
+                    <strong>@totalEmployees Employees</strong>
+                    <small>Currently managed</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- Dashboard Stats -->
+    <!-- ========================= -->
+
+    <section class="dashboard-stats-grid">
+
+        <div class="dashboard-stat-card primary-stat">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <span class="stat-trend positive">
+                    <i class="bi bi-arrow-up"></i>
+                    Active
+                </span>
+
+            </div>
+
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    Total Employees
+                </span>
+
+                <strong class="stat-value"
+                        data-counter="@totalEmployees">
+                    0
+                </strong>
+
+                <span class="stat-description">
+                    Employees registered in the system
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card info-stat">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+
+                <span class="stat-trend">
+                    <i class="bi bi-calculator"></i>
+                    Average
+                </span>
+
+            </div>
+
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    Average Age
+                </span>
+
+                <strong class="stat-value">
+                    @averageAge
+                </strong>
+
+                <span class="stat-description">
+                    Average employee age
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card success-stat">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon">
+                    <i class="bi bi-images"></i>
+                </div>
+
+                <span class="stat-trend positive">
+                    <i class="bi bi-check-lg"></i>
+                    @imagePercentage%
+                </span>
+
+            </div>
+
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    With Images
+                </span>
+
+                <strong class="stat-value"
+                        data-counter="@withImages">
+                    0
+                </strong>
+
+                <span class="stat-description">
+                    Employees with profile images
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card warning-stat">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon">
+                    <i class="bi bi-image-alt"></i>
+                </div>
+
+                <span class="stat-trend warning">
+                    <i class="bi bi-exclamation-circle"></i>
+                    Attention
+                </span>
+
+            </div>
+
+            <div class="stat-card-content">
+
+                <span class="stat-label">
+                    Without Images
+                </span>
+
+                <strong class="stat-value"
+                        data-counter="@withoutImages">
+                    0
+                </strong>
+
+                <span class="stat-description">
+                    Employees without profile images
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- Dashboard Main Grid -->
+    <!-- ========================= -->
+
+    <section class="dashboard-main-grid">
+
+
+        <!-- ========================= -->
+        <!-- Recent Employees -->
+        <!-- ========================= -->
+
+        <div class="dashboard-panel recent-employees-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div class="panel-title-wrapper">
+
+                    <span class="panel-title-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </span>
+
+                    <div>
+
+                        <h2>Recent Employees</h2>
+
+                        <p>
+                            Latest employees added to the system
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="panel-view-all">
+
+                    View All
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            @if (recentEmployees.Count > 0)
+            {
+                <div class="recent-employees-list">
+
+                    @foreach (var employee in recentEmployees)
+                    {
+                        var employeeInitial =
+                            string.IsNullOrWhiteSpace(employee.Name)
+                                ? "?"
+                                : employee.Name.Trim().Substring(0, 1).ToUpper();
+
+                        <div class="recent-employee-item">
+
+                            <div class="recent-employee-avatar">
+
+                                @if (!string.IsNullOrWhiteSpace(employee.PathImage))
+                                {
+                                    <img src="~/Files/@employee.PathImage"
+                                         alt="@employee.Name" />
+                                }
+                                else
+                                {
+                                    <span>
+                                        @employeeInitial
+                                    </span>
+                                }
+
+                            </div>
+
+                            <div class="recent-employee-info">
+
+                                <strong>
+                                    @employee.Name
+                                </strong>
+
+                                <span>
+                                    <i class="bi bi-person-badge"></i>
+                                    Employee #@employee.Id
+                                </span>
+
+                            </div>
+
+                            <div class="recent-employee-age">
+
+                                <span>Age</span>
+
+                                <strong>
+                                    @employee.Age
+                                </strong>
+
+                            </div>
+
+                            <a asp-controller="Employee"
+                               asp-action="Edit"
+                               asp-route-id="@employee.Id"
+                               class="recent-employee-action"
+                               title="Edit employee">
+
+                                <i class="bi bi-chevron-right"></i>
+
+                            </a>
+
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="dashboard-empty-state">
+
+                    <div class="empty-state-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <h3>No Employees Yet</h3>
+
+                    <p>
+                        Start by adding your first employee
+                        to the system.
+                    </p>
+
+                    <a asp-controller="Employee"
+                       asp-action="Create"
+                       class="dashboard-primary-button">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                        Add Employee
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- Quick Actions -->
+        <!-- ========================= -->
+
+        <div class="dashboard-panel quick-actions-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div class="panel-title-wrapper">
+
+                    <span class="panel-title-icon">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </span>
+
+                    <div>
+
+                        <h2>Quick Actions</h2>
+
+                        <p>
+                            Common management tasks
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions-grid">
+
+                <a asp-controller="Employee"
+                   asp-action="Create"
+                   class="quick-action-card">
+
+                    <span class="quick-action-icon primary">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>Add Employee</strong>
+
+                        <small>
+                            Create a new employee
+                        </small>
+
+                    </span>
+
+                    <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+                </a>
+
+
+                <a asp-controller="Employee"
+                   asp-action="GetAll"
+                   class="quick-action-card">
+
+                    <span class="quick-action-icon info">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>Manage Employees</strong>
+
+                        <small>
+                            View and manage employees
+                        </small>
+
+                    </span>
+
+                    <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+                </a>
+
+
+                <a asp-controller="Employee"
+                   asp-action="GetEmployeeSession"
+                   class="quick-action-card">
+
+                    <span class="quick-action-icon warning">
+                        <i class="bi bi-bookmark-star-fill"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>Employee Session</strong>
+
+                        <small>
+                            View saved employee
+                        </small>
+
+                    </span>
+
+                    <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+                </a>
+
+
+                <a asp-controller="Home"
+                   asp-action="Privacy"
+                   class="quick-action-card">
+
+                    <span class="quick-action-icon success">
+                        <i class="bi bi-shield-check"></i>
+                    </span>
+
+                    <span class="quick-action-content">
+
+                        <strong>Privacy</strong>
+
+                        <small>
+                            View privacy information
+                        </small>
+
+                    </span>
+
+                    <i class="bi bi-arrow-up-right quick-action-arrow"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- Dashboard Bottom -->
+    <!-- ========================= -->
+
+    <section class="dashboard-bottom-grid">
+
+
+        <!-- Image Progress -->
+
+        <div class="dashboard-panel dashboard-progress-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div class="panel-title-wrapper">
+
+                    <span class="panel-title-icon">
+                        <i class="bi bi-pie-chart-fill"></i>
+                    </span>
+
+                    <div>
+
+                        <h2>Profile Images</h2>
+
+                        <p>
+                            Employee image coverage
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="progress-content">
+
+                <div class="progress-ring-wrapper">
+
+                    <div class="progress-ring"
+                         data-progress="@imagePercentage">
+
+                        <div class="progress-ring-inner">
+
+                            <strong>
+                                @imagePercentage%
+                            </strong>
+
+                            <span>
+                                Complete
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-details">
+
+                    <div class="progress-detail-item">
+
+                        <span class="progress-detail-dot success"></span>
+
+                        <div>
+
+                            <strong>
+                                @withImages
+                            </strong>
+
+                            <span>
+                                With images
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-detail-item">
+
+                        <span class="progress-detail-dot warning"></span>
+
+                        <div>
+
+                            <strong>
+                                @withoutImages
+                            </strong>
+
+                            <span>
+                                Without images
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- System Status -->
+
+        <div class="dashboard-panel system-status-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div class="panel-title-wrapper">
+
+                    <span class="panel-title-icon">
+                        <i class="bi bi-activity"></i>
+                    </span>
+
+                    <div>
+
+                        <h2>System Status</h2>
+
+                        <p>
+                            Current workspace status
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="system-status-badge">
+                    <span></span>
+                    Online
+                </span>
+
+            </div>
+
+
+            <div class="system-status-content">
+
+                <div class="system-status-row">
+
+                    <div class="system-status-left">
+
+                        <span class="system-status-icon">
+                            <i class="bi bi-database-check"></i>
+                        </span>
+
+                        <div>
+
+                            <strong>Database</strong>
+
+                            <span>Connected</span>
+
+                        </div>
+
+                    </div>
+
+                    <span class="status-check">
+                        <i class="bi bi-check-lg"></i>
+                    </span>
+
+                </div>
+
+
+                <div class="system-status-row">
+
+                    <div class="system-status-left">
+
+                        <span class="system-status-icon">
+                            <i class="bi bi-person-check-fill"></i>
+                        </span>
+
+                        <div>
+
+                            <strong>Authentication</strong>
+
+                            <span>Active</span>
+
+                        </div>
+
+                    </div>
+
+                    <span class="status-check">
+                        <i class="bi bi-check-lg"></i>
+                    </span>
+
+                </div>
+
+
+                <div class="system-status-row">
+
+                    <div class="system-status-left">
+
+                        <span class="system-status-icon">
+                            <i class="bi bi-hdd-stack-fill"></i>
+                        </span>
+
+                        <div>
+
+                            <strong>Storage</strong>
+
+                            <span>Available</span>
+
+                        </div>
+
+                    </div>
+
+                    <span class="status-check">
+                        <i class="bi bi-check-lg"></i>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- Dashboard Footer Message -->
+    <!-- ========================= -->
+
+    <section class="dashboard-bottom-message">
+
+        <div class="dashboard-bottom-message-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <div>
+
+            <strong>
+                Your workspace is ready
+            </strong>
+
+            <p>
+                Use the quick actions above to manage your employees
+                and keep your workspace organized.
+            </p>
+
+        </div>
+
+        <a asp-controller="Employee"
+           asp-action="Create"
+           class="dashboard-bottom-message-button">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Add Employee
+
+        </a>
+
+    </section>
+
+</div>

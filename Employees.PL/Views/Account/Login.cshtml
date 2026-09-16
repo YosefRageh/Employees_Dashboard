@@ -1,0 +1,312 @@
+﻿@model Employees.BLL.Models.AccountVM.LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-page">
+
+    <div class="auth-brand-panel">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="brand">
+
+            <span class="brand-mark">
+                <i class="bi bi-people-fill"></i>
+            </span>
+
+            <span class="brand-content">
+                <strong>Employees</strong>
+                <small>Management System</small>
+            </span>
+
+        </a>
+
+
+        <div class="auth-brand-content">
+
+            <div class="page-eyebrow">
+
+                <i class="bi bi-shield-check"></i>
+
+                Secure Workspace
+
+            </div>
+
+
+            <h1>
+                Your workforce.
+                One refined workspace.
+            </h1>
+
+
+            <p>
+                Sign in to manage employee records, profiles,
+                images, and session information.
+            </p>
+
+        </div>
+
+
+        <div class="auth-brand-footer">
+
+            <span class="status-indicator"></span>
+
+            Secure application workspace
+
+        </div>
+
+    </div>
+
+
+    <main class="auth-form-panel">
+
+        <div class="auth-form-wrapper">
+
+
+            <div class="auth-mobile-brand">
+
+                <span class="brand-mark">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+
+                <div class="brand-content">
+
+                    <strong>
+                        Employees
+                    </strong>
+
+                    <small>
+                        Management System
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <div class="page-eyebrow">
+                    Welcome Back
+                </div>
+
+                <h2>
+                    Sign in to continue
+                </h2>
+
+                <p>
+                    Enter your account credentials below.
+                </p>
+
+            </div>
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="auth-validation-summary">
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="Login"
+                  method="post"
+                  class="auth-form">
+
+                @Html.AntiForgeryToken()
+
+
+                <input type="hidden"
+                       name="returnUrl"
+                       value="@ViewBag.ReturnUrl" />
+
+
+                <div class="form-group">
+
+                    <label asp-for="Email"
+                           class="form-label">
+
+                        Email
+
+                    </label>
+
+
+                    <div class="input-with-icon">
+
+                        <i class="bi bi-envelope-fill"></i>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="you@example.com"
+                               autocomplete="email" />
+
+                    </div>
+
+
+                    <span asp-validation-for="Email"
+                          class="field-validation-error">
+                    </span>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label asp-for="Password"
+                           class="form-label">
+
+                        Password
+
+                    </label>
+
+
+                    <div class="input-with-icon">
+
+                        <i class="bi bi-lock-fill"></i>
+
+                        <input asp-for="Password"
+                               class="form-control auth-password"
+                               placeholder="Enter your password"
+                               autocomplete="current-password" />
+
+
+                        <button type="button"
+        class="password-visibility-button"
+        data-password-target="Password"
+        aria-label="Show password"
+        aria-pressed="false">
+
+    <i class="bi bi-eye"></i>
+
+</button>
+
+                    </div>
+
+
+                    <span asp-validation-for="Password"
+                          class="field-validation-error">
+                    </span>
+
+                </div>
+
+
+                <label class="remember-control">
+
+                    <input asp-for="RememberMe" />
+
+                    <span></span>
+
+                    <strong>
+                        Remember me
+                    </strong>
+
+                </label>
+
+
+                <button type="submit"
+                        class="btn btn-primary auth-submit">
+
+                    <span>
+                        Sign In
+                    </span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+
+                <div class="auth-footer-text">
+
+                    <span>
+                        Don't have an account?
+                    </span>
+
+                    <a asp-controller="Account"
+                       asp-action="Register">
+
+                        Register
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                document
+                    .querySelectorAll(
+                        "[data-password-target]"
+                    )
+                    .forEach(
+                        function (button) {
+
+                            button.addEventListener(
+                                "click",
+                                function () {
+
+                                    const id =
+                                        this.getAttribute(
+                                            "data-password-target"
+                                        );
+
+                                    const input =
+                                        document.getElementById(id);
+
+                                    const icon =
+                                        this.querySelector("i");
+
+
+                                    if (!input) {
+                                        return;
+                                    }
+
+
+                                    if (
+                                        input.type === "password"
+                                    ) {
+
+                                        input.type =
+                                            "text";
+
+                                        icon.className =
+                                            "bi bi-eye-slash";
+
+                                    }
+                                    else {
+
+                                        input.type =
+                                            "password";
+
+                                        icon.className =
+                                            "bi bi-eye";
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+            }
+        );
+
+    </script>
+
+}

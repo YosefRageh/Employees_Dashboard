@@ -1,0 +1,533 @@
+﻿@model Employees.BLL.Models.AccountVM.RegisterVM
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="auth-page register-auth-page">
+
+    <!-- ========================================================= -->
+    <!-- LEFT BRAND PANEL -->
+    <!-- ========================================================= -->
+
+    <div class="auth-brand-panel register-brand-panel">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="brand register-brand-link">
+
+            <span class="brand-mark">
+                <i class="bi bi-people-fill"></i>
+            </span>
+
+            <span class="brand-content">
+                <strong>Employees</strong>
+                <small>Management System</small>
+            </span>
+
+        </a>
+
+
+        <div class="auth-brand-content register-brand-content">
+
+            <div class="page-eyebrow register-eyebrow">
+
+                <span class="register-eyebrow-icon">
+                    <i class="bi bi-person-plus-fill"></i>
+                </span>
+
+                <span>
+                    Create Account
+                </span>
+
+            </div>
+
+
+            <h1 class="register-brand-title">
+
+                Build your workspace.
+                <span>
+                    Start with a secure account.
+                </span>
+
+            </h1>
+
+
+            <p class="register-brand-description">
+
+                Create your account and get access to a refined
+                employee management workspace built for organized,
+                secure, and efficient workforce management.
+
+            </p>
+
+
+            <div class="register-feature-list">
+
+
+                <div class="register-feature">
+
+                    <span class="register-feature-icon">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Secure authentication
+                        </strong>
+
+                        <span>
+                            Your account is protected by secure
+                            authentication.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="register-feature">
+
+                    <span class="register-feature-icon">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            One refined workspace
+                        </strong>
+
+                        <span>
+                            Manage your employees from one place.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="register-feature">
+
+                    <span class="register-feature-icon">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Simple workflow
+                        </strong>
+
+                        <span>
+                            Get started quickly with a focused
+                            management experience.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="auth-brand-footer register-brand-footer">
+
+            <span class="status-indicator"></span>
+
+            <span>
+                Secure application workspace
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================================================= -->
+    <!-- REGISTER FORM PANEL -->
+    <!-- ========================================================= -->
+
+    <main class="auth-form-panel register-form-panel">
+
+        <div class="auth-form-wrapper register-form-wrapper">
+
+
+            <!-- MOBILE BRAND -->
+
+            <div class="auth-mobile-brand">
+
+                <span class="brand-mark">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+
+                <div class="brand-content">
+
+                    <strong>
+                        Employees
+                    </strong>
+
+                    <small>
+                        Management System
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- HEADING -->
+
+            <div class="auth-heading register-heading">
+
+                <div class="page-eyebrow register-form-eyebrow">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    Get Started
+
+                </div>
+
+
+                <h2>
+                    Create your account
+                </h2>
+
+
+                <p>
+                    Set up your account to enter the employee
+                    management workspace.
+                </p>
+
+            </div>
+
+
+            <!-- VALIDATION -->
+
+            <div asp-validation-summary="ModelOnly"
+                 class="auth-validation-summary">
+            </div>
+
+
+            <!-- FORM -->
+
+            <form asp-controller="Account"
+                  asp-action="Register"
+                  method="post"
+                  class="auth-form register-form">
+
+                @Html.AntiForgeryToken()
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group register-form-group">
+
+                    <label asp-for="Email"
+                           class="form-label">
+
+                        <span class="register-label-icon">
+                            <i class="bi bi-envelope-fill"></i>
+                        </span>
+
+                        Email
+
+                    </label>
+
+
+                    <div class="input-with-icon register-input-wrapper">
+
+                        <i class="bi bi-at register-input-leading"></i>
+
+                        <input asp-for="Email"
+                               class="form-control register-input"
+                               placeholder="you@example.com"
+                               autocomplete="email" />
+
+                    </div>
+
+
+                    <span asp-validation-for="Email"
+                          class="field-validation-error">
+                    </span>
+
+                </div>
+
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group register-form-group">
+
+                    <label asp-for="Password"
+                           class="form-label">
+
+                        <span class="register-label-icon">
+                            <i class="bi bi-lock-fill"></i>
+                        </span>
+
+                        Password
+
+                    </label>
+
+
+                    <div class="input-with-icon register-input-wrapper">
+
+                        <i class="bi bi-shield-lock-fill register-input-leading"></i>
+
+
+                        <input asp-for="Password"
+                               class="form-control register-input auth-password"
+                               id="registerPassword"
+                               placeholder="Create a secure password"
+                               autocomplete="new-password" />
+
+
+                        <button type="button"
+        class="password-visibility-button"
+        id="registerPasswordToggle"
+        aria-label="Show password"
+        aria-pressed="false">
+
+    <i class="bi bi-eye"></i>
+
+</button>
+
+                    </div>
+
+
+                    <span asp-validation-for="Password"
+                          class="field-validation-error">
+                    </span>
+
+
+                    <div class="register-password-hint">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        <span>
+                            Minimum 6 characters required.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group register-form-group">
+
+                    <label asp-for="ConfirmPassword"
+                           class="form-label">
+
+                        <span class="register-label-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </span>
+
+                        Confirm Password
+
+                    </label>
+
+
+                    <div class="input-with-icon register-input-wrapper">
+
+                        <i class="bi bi-check2-square register-input-leading"></i>
+
+
+                        <input asp-for="ConfirmPassword"
+                               class="form-control register-input auth-password"
+                               id="confirmRegisterPassword"
+                               placeholder="Repeat your password"
+                               autocomplete="new-password" />
+
+
+                       <button type="button"
+        class="password-visibility-button"
+        id="confirmRegisterPasswordToggle"
+        aria-label="Show password"
+        aria-pressed="false">
+
+    <i class="bi bi-eye"></i>
+
+</button>
+
+                    </div>
+
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="field-validation-error">
+                    </span>
+
+                </div>
+
+
+
+                <!-- SUBMIT -->
+
+                <button type="submit"
+                        class="btn btn-primary auth-submit register-submit">
+
+                    <span>
+                        Create Account
+                    </span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+
+
+                <!-- LOGIN LINK -->
+
+                <div class="auth-footer-text register-footer-text">
+
+                    <span>
+                        Already have an account?
+                    </span>
+
+                    <a asp-controller="Account"
+                       asp-action="Login">
+
+                        Sign in
+
+                        <i class="bi bi-box-arrow-in-right"></i>
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+
+            <!-- SECURITY NOTE -->
+
+            <div class="register-security-note">
+
+                <i class="bi bi-shield-check"></i>
+
+                <span>
+                    Secure account access
+                </span>
+
+                <span class="register-security-dot"></span>
+
+                <i class="bi bi-lock-fill"></i>
+
+                <span>
+                    Protected credentials
+                </span>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                document
+                    .querySelectorAll(
+                        ".register-password-toggle"
+                    )
+                    .forEach(
+                        function (button) {
+
+                            button.addEventListener(
+                                "click",
+                                function () {
+
+                                    const inputId =
+                                        this.id ===
+                                        "registerPasswordToggle"
+                                            ? "registerPassword"
+                                            : "confirmRegisterPassword";
+
+
+                                    const input =
+                                        document.getElementById(
+                                            inputId
+                                        );
+
+
+                                    const icon =
+                                        this.querySelector("i");
+
+
+                                    if (
+                                        !input ||
+                                        !icon
+                                    ) {
+                                        return;
+                                    }
+
+
+                                    if (
+                                        input.type === "password"
+                                    ) {
+
+                                        input.type = "text";
+
+                                        icon.className =
+                                            "bi bi-eye-slash";
+
+                                        this.setAttribute(
+                                            "aria-label",
+                                            "Hide password"
+                                        );
+
+                                        this.setAttribute(
+                                            "aria-pressed",
+                                            "true"
+                                        );
+
+                                    }
+                                    else {
+
+                                        input.type = "password";
+
+                                        icon.className =
+                                            "bi bi-eye";
+
+                                        this.setAttribute(
+                                            "aria-label",
+                                            "Show password"
+                                        );
+
+                                        this.setAttribute(
+                                            "aria-pressed",
+                                            "false"
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+            }
+        );
+
+    </script>
+
+}
